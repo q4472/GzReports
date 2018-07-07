@@ -1,0 +1,67 @@
+﻿@using Nskd
+@model FarmSib.AreasAgrs.Areas.Agrs.Models.F0Model
+<style type="text/css">
+    #p_agrs_f0_detail input {
+        padding: 2px;
+    }
+</style>
+<div id="p_agrs_f0_detail" style="width: 1095px; height:auto; overflow: hidden;">
+    @if ((Model.workingData != null) && (Model.workingData.Rows.Count > 0))
+    {
+        NpcDataRow row = Model.workingData.Rows[0];
+        <br />
+        <form id="p_agrs_f0_detail_form" novalidate="novalidate">
+            <table>
+                <tr>
+                    <td>
+                        <table>
+                            @for (int ci = 0; ci < Math.Min(Model.workingData.Columns.Count, 12); ci++)
+                        {
+                            NpcDataColumn col = Model.workingData.Columns[ci];
+                            String hidden = ((Boolean)col.ExtendedProperties["hidden"]) ? "display: none;" : "";
+                        <tr style="height: 24px; @hidden">
+                            <td style="text-align: right; width: 200px; padding: 2px;">
+                                @{ Html.RenderPartial("DetailFields/Caption", Model, new ViewDataDictionary() { new KeyValuePair<String, Object>("ci", ci) }); }
+                            </td>
+                            <td>
+                                @{ Html.RenderPartial("DetailFields/Value", Model, new ViewDataDictionary() { new KeyValuePair<String, Object>("ci", ci) }); }
+                            </td>
+                        </tr>
+                        }
+                        </table>
+                    </td>
+                    <td>
+                        <table>
+                            @for (int ci = 12; ci < Model.workingData.Columns.Count; ci++)
+                        {
+                            NpcDataColumn col = Model.workingData.Columns[ci];
+                            String hidden = ((Boolean)col.ExtendedProperties["hidden"]) ? "display: none;" : "";
+                        <tr style="height: 24px; @hidden">
+                            <td style="text-align: right; width: 200px; padding: 2px;">
+                                @{ Html.RenderPartial("DetailFields/Caption", Model, new ViewDataDictionary() { new KeyValuePair<String, Object>("ci", ci) }); }
+                            </td>
+                            <td>
+                                @{ Html.RenderPartial("DetailFields/Value", Model, new ViewDataDictionary() { new KeyValuePair<String, Object>("ci", ci) }); }
+                            </td>
+                        </tr>
+                        }
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    }
+</div>
+<script type="text/javascript">
+
+    Nskd.Validator.parse('#p_agrs_f0_detail_form');
+
+    $('#p_agrs_f0_detail input').change(function (event) {
+        agrsF0DetailFieldChange(this);
+    });
+    function agrsF0DetailFieldChange(element) {
+        $(element).css('background-color', '#cfc');
+        $('#p_agrs_f0_save_button').css('background-color', '#cfc');
+        $('#p_agrs_f0_save_button').prop('disabled', false);
+    }
+</script>

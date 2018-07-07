@@ -1,0 +1,52 @@
+﻿@using FarmSib.Base.Models
+@model FarmSib.Base.Models.DataGridView
+@if ((Model != null) &&
+     (Model.Columns != null) && (Model.Columns.Count > 0))
+{
+    <style type="text/css">
+        table#_@Model.Id th {
+            border: 1px solid black;
+            font-weight: bold;
+            padding: 2px;
+            text-align: center;
+        }
+        table#_@Model.Id td {
+            border: 1px solid black;
+            padding: 2px;
+        }
+    </style>
+    <table id="_@Model.Id">
+        <tr>
+            @foreach (DataGridColumn col in Model.Columns)
+            {
+                if (col.IsVisible)
+                {
+                    <th style="@col.HeaderCellStyle">@col.Caption</th>
+                }
+            }
+        </tr>
+        @foreach (DataGridRow row in Model.Rows)
+        {
+            <tr @Html.Raw(row.GetAttributesAsHtmlString()) style="@row.Style" class="report-row">
+                @for (int ci = 0; ci < Model.Columns.Count; ci++)
+                {
+                    DataGridColumn col = Model.Columns[ci];
+                    if (col.IsVisible)
+                    {
+                        <td style="@col.DataCellStyle">
+                            @switch (col.DataType.ToString())
+                            {
+                                case "System.DateTime":
+                                    <span>@(row.ItemArray[ci].ToString())</span>
+                                    break;
+                                default:
+                                <span>@row[ci]</span>
+                                    break;
+                            }
+                        </td>
+                    }
+                }
+            </tr>
+        }
+    </table>
+}

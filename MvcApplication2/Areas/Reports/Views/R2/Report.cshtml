@@ -1,0 +1,148 @@
+﻿@model MvcApplication2.Areas.Reports.Models.R2Model
+
+<style type="text/css">
+    .sud_0 {
+    }
+
+    .sud_1 {
+        background-color: #fbb;
+    }
+
+    .note {
+        overflow: hidden;
+        width: 100px;
+    }
+
+    .note_e {
+        overflow: hidden;
+        width: 100px;
+    }
+
+    .note_f {
+        background-color: #bbf;
+        overflow: hidden;
+        width: 100px;
+    }
+</style>
+<script type="text/javascript">
+    /*
+    function R2ReportOnLoad() {
+        $('.group3').on('dblclick', function (e) {
+            var top = (e.pageY > ($(window).outerHeight() / 2)) ? e.pageY - $('#sud_panel').outerHeight() : e.pageY;
+            var left = (e.pageX > ($(window).outerWidth() / 2)) ? e.pageX - $('#sud_panel').outerWidth() : e.pageX;
+            SudPopupShow(this, top, left);
+        });
+    }
+    */
+</script>
+<table style="margin: 2px;">
+    <colgroup>
+        <col width="84" />
+        <col width="84" />
+        <col width="100" />
+        <col width="100" />
+        <col width="100" />
+        <col width="100" />
+        <col width="100" />
+        <col width="100" />
+        <col width="100" />
+        <col width="100" />
+        <col width="100" />
+        <col width="100" />
+    </colgroup>
+    <tr class="header2">
+        <td colspan="11">Отчёт по оплатам</td>
+    </tr>
+    <tr>
+        <td colspan="11">&nbsp;</td>
+    </tr>
+    <tr class="header1">
+        <td class="b">Маркетолог</td>
+        <td class="b">Менеджер</td>
+        <td class="b">Выписка</td>
+        <td class="b">Счёт/Реализация</td>
+        <td class="b">Договор</td>
+        <td class="b">Клиент</td>
+        <td class="b">Сумма оплаты</td>
+        <td class="b">Наценка</td>
+        <td class="b">НДС</td>
+        <td class="b">Транспортные расходы</td>
+        <td class="b">Коммерческие расходы</td>
+        <td class="b">Прибыль</td>
+    </tr>
+
+    @if (Model.ReportData != null)
+    {
+        foreach (System.Data.DataRow dr in Model.ReportData.Rows)
+        {
+            switch ((Int32)dr["level"])
+            {
+                case 0:
+                    <tr class="group0" data-level="@dr["level"]">
+                        <td class="b" colspan="6">@dr["Маркетолог"]</td>
+                        <td class="b tar">@Convert.ToDouble(dr["Сумма оплаты"]).ToString("n2")</td>
+                        <td class="b tar">@Convert.ToDouble(dr["Наценка"]).ToString("n2")</td>
+                        <td class="b tar">@Convert.ToDouble(dr["НДС"]).ToString("n2")</td>
+                        <td class="b tar">@Convert.ToDouble(dr["Транспортные расходы"]).ToString("n2")</td>
+                        <td class="b tar">@Convert.ToDouble(dr["Коммерческие расходы"]).ToString("n2")</td>
+                        <td class="b tar">@Convert.ToDouble(dr["Прибыль"]).ToString("n2")</td>
+                    </tr>
+                    break;
+                case 1:
+                <tr class="group1" data-level="@dr["level"]">
+                    <td class="b" colspan="6">@dr["Маркетолог"]</td>
+                    <td class="b tar">@Convert.ToDouble(dr["Сумма оплаты"]).ToString("n2")</td>
+                    <td class="b tar">@Convert.ToDouble(dr["Наценка"]).ToString("n2")</td>
+                    <td class="b tar">@Convert.ToDouble(dr["НДС"]).ToString("n2")</td>
+                    <td class="b tar">@Convert.ToDouble(dr["Транспортные расходы"]).ToString("n2")</td>
+                    <td class="b tar">@Convert.ToDouble(dr["Коммерческие расходы"]).ToString("n2")</td>
+                    <td class="b tar">@Convert.ToDouble(dr["Прибыль"]).ToString("n2")</td>
+                </tr>
+                    break;
+                case 2:
+                <tr class="group2" data-level="@dr["level"]">
+                    <td>&nbsp;</td>
+                    <td class="b" colspan="5">@dr["Менеджер"]</td>
+                    <td class="b tar">@Convert.ToDouble(dr["Сумма оплаты"]).ToString("n2")</td>
+                    <td class="b tar">@Convert.ToDouble(dr["Наценка"]).ToString("n2")</td>
+                    <td class="b tar">@Convert.ToDouble(dr["НДС"]).ToString("n2")</td>
+                    <td class="b tar">@Convert.ToDouble(dr["Транспортные расходы"]).ToString("n2")</td>
+                    <td class="b tar">@Convert.ToDouble(dr["Коммерческие расходы"]).ToString("n2")</td>
+                    <td class="b tar">@Convert.ToDouble(dr["Прибыль"]).ToString("n2")</td>
+                </tr>
+                    break;
+                default:
+                <tr class="group3 report-row sud_@dr["sud_status_id"]"
+                    data-level="@dr["level"]"
+                    data-sud-docno="@dr["Счет/Реализация"]"
+                    data-sud-agreement-descr="@dr["Договор"]"
+                    data-sud-iddoc="@dr["sud_iddoc"]"
+                    data-sud-status-id="@dr["sud_status_id"]"
+                    data-sud-stage-id="@dr["sud_stage_id"]"
+                    data-sud-set-of-docs-id="@dr["sud_set_of_docs_id"]"
+                    data-sud-payments-satus-id="@dr["sud_payments_status_id"]"
+                    data-sud-note="@dr["sud_note"]">
+                    @if ((dr["sud_descr"] == DBNull.Value) || ((String)dr["sud_descr"] == ""))
+                    {
+                        <td class="b" colspan="2"><div class="note_e">@dr["sud_descr"]</div></td>
+                    }
+                    else
+                    {
+                        <td class="b" colspan="2"><div class="note_f">@dr["sud_descr"]</div></td>
+                    }
+                    <td class="b">@dr["Выписка"]</td>
+                    <td class="b">@dr["Счет/Реализация"]</td>
+                    <td class="b">@dr["Договор"]</td>
+                    <td class="b">@dr["Клиент"]</td>
+                    <td class="b tar">@Convert.ToDouble(dr["Сумма оплаты"]).ToString("n2")</td>
+                    <td class="b tar">@Convert.ToDouble(dr["Наценка"]).ToString("n2")</td>
+                    <td class="b tar">@Convert.ToDouble(dr["НДС"]).ToString("n2")</td>
+                    <td class="b tar">@Convert.ToDouble(dr["Транспортные расходы"]).ToString("n2")</td>
+                    <td class="b tar">@Convert.ToDouble(dr["Коммерческие расходы"]).ToString("n2")</td>
+                    <td class="b tar">@Convert.ToDouble(dr["Прибыль"]).ToString("n2")</td>
+                </tr>
+                    break;
+            }
+        }
+    }
+</table>

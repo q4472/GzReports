@@ -1,0 +1,210 @@
+﻿<style type="text/css">
+    #sud_panel {
+        position: absolute;
+        background-color: #fff;
+        border: 1px solid black;
+        padding: 4px;
+        display: none;
+    }
+</style>
+<div id="sud_panel">
+    <input type="hidden" id="sud_panel_iddoc" />
+    <input type="hidden" id="sud_panel_agreement_id" />
+    <input type="hidden" id="sud_panel_bill_list" />
+    <label>Документ: </label><label id="sud_panel_docno"></label><br />
+    <label>Договор: </label><label id="sud_panel_agreement_descr"></label><br /><br />
+
+    <table>
+        <tr>
+            <td style="text-align: right;">
+                <label>Cтатус документа</label>
+            </td>
+            <td>
+                <select id="sud_panel_status_id" onchange="sud_panel_status_changed();">
+                    <option value="0" selected="selected">не судебный</option>
+                    <option value="1">судебный</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: right;">
+                <label>Стадия производства</label>
+            </td>
+            <td>
+                <select id="sud_panel_stage_id" disabled="disabled">
+                    <option value="0" selected="selected"></option>
+                    <!--
+                    <option value="1" style="display: none;">возбуждение</option>
+                    -->
+                    <option value="2" style="font-weight: bold;">претензия направлена</option>
+                    <option value="3" style="font-weight: bold;">исковое направлено</option>
+                    <!--
+                    <option value="4" style="display: none;">апелляция</option>
+                    <option value="5" style="display: none;">кассация</option>
+                    <option value="6" style="display: none;">надзор</option>
+                    <option value="7" style="display: none;">пересмотр</option>
+                    -->
+                    <option value="8" style="font-weight: bold;">решение суда</option>
+                    <!--
+                    <option value="9" style="font-weight: bold;">завершено</option>
+                    -->
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: right;">
+                <label>Комплект документов</label>
+            </td>
+            <td>
+                <select id="sud_panel_set_of_docs_id" disabled="disabled">
+                    <option value="0" selected="selected"></option>
+                    <option value="1">неполный</option>
+                    <option value="2">полный</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align: right;">
+                <label>Поступление денег</label>
+            </td>
+            <td>
+                <select id="sud_panel_payments_status_id" disabled="disabled">
+                    <option value="0" selected="selected"></option>
+                    <option value="1">не оплаченный</option>
+                    <option value="2">частично оплаченный</option>
+                    <option value="3">оплаченный</option>
+                </select>
+            </td>
+        </tr>
+    </table>
+    <br />
+    <form>
+        <table>
+            <tr>
+                <td>Срок оплаты накладной</td>
+                <td>
+                    <input type="text"
+                           id="sud_panel_payment_date"
+                           value=""
+                           data-val="true" data-val-date="" data-val-minlength="10"
+                           onchange="sudPanelPaymetDateChange(this);" />
+                </td>
+            </tr>
+        </table>
+    </form>
+    <br />
+    <textarea id="sud_panel_note" style="width: 220px; height: 125px;"></textarea><br /><br />
+    <label>Применить ко всем накладным этого договора</label>
+    <input type="checkbox" id="sud_punel_agreement_cascade" /><br /><br />
+    <input type="button" value="Сохранить" onclick="upsertSud();" />
+    <input type="button" value="Закрыть" onclick="$('#sud_panel').hide();" />
+</div>
+<script type="text/javascript">
+
+    function SudPopupShow(tr, posY, posX) {
+        $('#sud_panel_iddoc').val(tr.getAttribute('data-sud-iddoc'));
+        var agreement_id = tr.getAttribute('data-sud-agreement-id');
+        if (agreement_id) {
+            $('#sud_panel_agreement_id').val(agreement_id);
+            $('#sud_panel_agreement_descr').text(tr.getAttribute('data-sud-agreement-descr'));
+            var bill_list = '';
+            var tbody = tr.parentNode;
+            var trs = $(tbody).find('tr[data-sud-agreement-id="' + agreement_id + '"]');
+            trs.each(function (index, element) {
+                bill_list += element.getAttribute('data-sud-iddoc') + ',';
+            });
+            bill_list = bill_list.substr(0, bill_list.length - 1);
+            $('#sud_panel_bill_list').val(bill_list);
+        }
+        $('#sud_panel_docno').text(tr.getAttribute('data-sud-docno'));
+        $('#sud_punel_agreement_cascade').prop('checked', true);
+
+        if (tr.getAttribute('data-sud-status-id') == 0) {
+            $('#sud_panel_status_id option[value="0"]').prop('selected', true);
+            $('#sud_panel_stage_id option[value="0"]').prop('selected', true);
+            $('#sud_panel_set_of_docs_id option[value="0"]').prop('selected', true);
+            $('#sud_panel_payments_status_id option[value="0"').prop('selected', true);
+            //$('#sud_panel_note').text('');
+            $('#sud_panel_stage_id').prop('disabled', true);
+            $('#sud_panel_set_of_docs_id').prop('disabled', true);
+            $('#sud_panel_payments_status_id').prop('disabled', true);
+            //$('#sud_panel_note').prop('disabled', true);
+        } else {
+            $('#sud_panel_status_id option[value="1"]').prop("selected", true);
+            $('#sud_panel_stage_id option[value="' + tr.getAttribute('data-sud-stage-id') + '"]').prop("selected", true);
+            $('#sud_panel_set_of_docs_id option[value="' + tr.getAttribute('data-sud-set-of-docs-id') + '"]').prop("selected", true);
+            $('#sud_panel_payments_status_id option[value="' + tr.getAttribute('data-sud-payments-status-id') + '"]').prop("selected", true);
+            //$('#sud_panel_note').text(tr.getAttribute('data-sud-note'));
+            $('#sud_panel_stage_id').prop('disabled', false);
+            $('#sud_panel_set_of_docs_id').prop('disabled', false);
+            $('#sud_panel_payments_status_id').prop('disabled', false);
+            //$('#sud_panel_note').prop('disabled', false);
+        }
+        $('#sud_panel_payment_date').val(tr.getAttribute('data-sud-payments-date'));
+        $('#sud_panel_note').text(tr.getAttribute('data-sud-note'));
+
+        $('#sud_panel').show().offset({ top: posY, left: posX });
+    }
+
+    function upsertSud() {
+
+        var iddoc = escape($('#sud_panel_iddoc').val());
+        var status_id = $('#sud_panel_status_id :selected').val();
+        var stage_id = $('#sud_panel_stage_id :selected').val();
+        var set_of_docs_id = $('#sud_panel_set_of_docs_id :selected').val();
+        var payments_status_id = $('#sud_panel_payments_status_id :selected').val();
+        var payment_date = escape($('#sud_panel_payment_date').val());
+        var note = escape($('#sud_panel_note').text());
+        var agreement_id = escape($('#sud_panel_agreement_id').val());
+        var agreement_cascade = $('#sud_punel_agreement_cascade')[0].checked;
+        var bill_list = escape($('#sud_panel_bill_list').val());
+
+        var data = 'r=' + Math.random();
+        data += '&iddoc=' + iddoc;
+        data += '&status_id=' + status_id;
+        data += '&stage_id=' + stage_id;
+        data += '&set_of_docs_id=' + set_of_docs_id;
+        data += '&payments_status_id=' + payments_status_id;
+        data += '&payment_date=' + payment_date;
+        data += '&note=' + note;
+        data += '&agreement_id=' + agreement_id;
+        data += '&agreement_cascade=' + agreement_cascade;
+        data += '&bill_list=' + bill_list;
+
+        if ((typeof (Nskd) !== 'undefined') && (Nskd.Server)) { data += '&SessionId=' + Nskd.Server.SessionId; }
+
+        $.post('/Reports/Sud/UpsertSud', data);
+
+        $('#_layout_footer_msg').text('Данные не обновлены.').show();
+
+        $('#sud_panel').hide();
+    }
+
+    function sud_panel_status_changed() {
+        if ($('#sud_panel_status_id').val() == 0) {
+            $('#sud_panel_stage_id option[value=0]').prop('selected', true);
+            $('#sud_panel_set_of_docs_id option[value=0]').prop('selected', true);
+            $('#sud_panel_payments_status_id option[value=0]').prop('selected', true);
+            $('#sud_panel_note').text('');
+            $('#sud_panel_stage_id').prop('disabled', true);
+            $('#sud_panel_set_of_docs_id').prop('disabled', true);
+            $('#sud_panel_payments_status_id').prop('disabled', true);
+            //$('#sud_panel_note').prop('disabled', true);
+        } else {
+            $('#sud_panel_stage_id').prop('disabled', false);
+            $('#sud_panel_set_of_docs_id').prop('disabled', false);
+            $('#sud_panel_payments_status_id').prop('disabled', false);
+            //$('#sud_panel_note').prop('disabled', false);
+        }
+    }
+    function sudPanelPaymetDateChange(el) {
+        el.value = Nskd.Validator.dateNorm(el.value);
+        $('#sud_punel_agreement_cascade').prop('checked', false);
+        var note = $('#sud_panel_note');
+        var text = note.text();
+        if (text.indexOf('Срок оплаты установлен вручную.') < 0) {
+            if (text) { note.text(text + ' Срок оплаты установлен вручную.'); }
+            else { note.text('Срок оплаты установлен вручную.'); }
+        }
+    }
+</script>

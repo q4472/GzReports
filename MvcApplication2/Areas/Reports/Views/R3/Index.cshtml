@@ -1,0 +1,222 @@
+﻿@using FarmSib.Base.Models
+@using MvcApplication2.Areas.Reports.Models
+@model MvcApplication2.Areas.Reports.Models.R3Model
+@{
+    Layout = null;
+}
+<style type="text/css">
+    table#r3_p_layout div {
+        overflow: auto;
+        border: 1px solid black;
+    }
+
+    table#r3_p_layout td {
+        vertical-align: top;
+    }
+
+    table#r3_p_layout div#r3_p_filter_panel {
+        width: 400px;
+        height: 550px;
+        margin: 10px;
+    }
+
+    table#r3_p_layout div#r3_p_data_grid_panel {
+        width: 1050px;
+        height: 550px;
+        margin: 10px 10px 10px 0px;
+    }
+
+    table#r3_p_layout div#r3_p_command_panel {
+        width: 600px;
+        height: 300px;
+        margin: 10px;
+    }
+
+        table#r3_p_layout div#r3_p_command_panel input {
+            width: 100px;
+            height: 30px;
+            margin: 10px;
+        }
+
+    table#r3_p_layout div#r3_p_detail_panel {
+        width: 850px;
+        height: 300px;
+        margin: 10px 10px 10px 0px;
+    }
+
+    #r3_p_filter tr {
+        padding: 2px;
+    }
+
+    #r3_p_filter td {
+        padding: 2px;
+    }
+
+        #r3_p_filter td input {
+            width: 150px;
+        }
+</style>
+<style type="text/css" media="print">
+    tr#r3_p_layout_section_1 table {
+        background-color: #fff;
+    }
+    tr#r3_p_layout_section_1 table div#r3_p_filter_panel {
+        display: none;
+    }
+    tr#r3_p_layout_section_1 table div#r3_p_data_grid_panel {
+        overflow: hidden;
+        height: 100%;
+        width: 100%;
+    } 
+    tr#r3_p_layout_section_2 {
+        display: none;
+    }
+</style>
+<table id="r3_p_layout">
+    <tr id="r3_p_layout_section_1">
+        <td>
+            <table style="background-color: #ffc;">
+                <tr>
+                    <td>
+                        <div id="r3_p_filter_panel">
+                            <p style="font-weight: bold; text-align:center;">Фильтры</p>
+                            @if ((Model.FilteredView.Rows != null) && (Model.FilteredView.Rows.Count > 0) &&
+                                (Model.FilteredView.Columns != null) && (Model.FilteredView.Columns.Count > 0))
+                            {
+                                <table id="r3_p_filter">
+                                    @foreach (DataGridColumn col in Model.FilteredView.Columns)
+                                    {
+                                        <tr>
+                                            @if (col.IsUsedInFilter)
+                                            {
+                                                <td>@col.Caption</td>
+                                                <td><input type="text" /></td>
+                                            }
+                                        </tr>
+                                    }
+                                </table><br />
+                                <p style="font-weight: bold;">Стадии судебного производства</p>
+                                if ((Model.FilterStageSelector != null) && (Model.FilterStageSelector.Count > 0))
+                                {
+                                    <table id="r3_p_stage_filter">
+                                        @foreach (R3Model.StageSelector ss in Model.FilterStageSelector)
+                                        {
+                                            <tr data-stage-value="@ss.Value">
+                                                <td style="width: 100px;">@ss.Name</td>
+                                                <td style="width: 40px; text-align: right;">@ss.Count.ToString()</td>
+                                                <td style="width: 100px; text-align: right;">@ss.Sum1.ToString("n2")</td>
+                                                <td style="width: 100px; text-align: right;">@ss.Sum2.ToString("n2")</td>
+                                                <td style="padding-left: 10px;">
+                                                    @if (ss.IsSelected)
+                                                    {
+                                                        <input type="checkbox" checked="checked" />
+                                                    }
+                                                    else
+                                                    {
+                                                        <input type="checkbox" />
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    </table><br />
+                                }
+                                <input type="button" id="r3_p_filter_button" value="Применить фильтр" onclick="r3_p_filter_apply();" />
+                            }
+                            <hr style="height: 1px;" />
+                            <br />
+                            <table>
+                                <tr>
+                                    <td colspan="2"><input type="button" id="r3_p_period_button" value="Выбрать накладные изменившие стадию за период" onclick="r3_p_period_apply();" /></td>
+                                </tr>
+                                <tr><td style="height: 10px;"></td></tr>
+                                <tr>
+                                    <td style="text-align: right;">с:&nbsp;</td>
+                                    <td><input type="text" id="r3_p_period1" value="@DateTime.Now.AddDays(-3).ToString("yyyy-MM-dd")" /></td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: right;">по:&nbsp;</td>
+                                    <td><input type="text" id="r3_p_period2" value="@DateTime.Now.ToString("yyyy-MM-dd")" /></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </td>
+                    <td>
+                        <div id="r3_p_data_grid_panel">
+                            @{ Html.RenderPartial("~/Views/Shared/DataGridView/Show.cshtml", Model.FilteredView); }
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr id="r3_p_layout_section_2">
+        <td>
+            <table style="background-color: #fcf;">
+                <tr>
+                    <td>
+                        <p>Количество накладных на разных стадиях.</p>
+                        <div id="r3_p_command_panel">
+                            @{ Html.RenderPartial("~/Views/Shared/DataGridView/Show.cshtml", Model.CrossView); }
+                        </div>
+                    </td>
+                    <td>
+                        <p>История изменений документа.</p>
+                        <div id="r3_p_detail_panel">
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+@{ Html.RenderPartial("~/Areas/Reports/Views/Shared/Sud/SudPopup.cshtml"); }
+<script type="text/javascript">
+
+    function r3_p_filter_apply() {
+        $('#r3_p_filter_button').prop('disabled', true);
+        var data = 'r=' + Math.random();
+        $('table#r3_p_filter input').each(function (i, e) {
+            data += '&fs=' + escape(e.value);
+        });
+        $('table#r3_p_stage_filter tr').each(function (i, e) {
+            if ($(e).find('input').prop('checked')) {
+                data += '&sf=' + escape(e.getAttribute('data-stage-value'));
+            }
+        });
+        $.post('/Reports/R3/ApplyFilter', data, function (data) {
+            $('div#r3_p_data_grid_panel').html(data);
+            R3DataListOnLoad();
+            $('#r3_p_filter_button').prop('disabled', false);
+        });
+    }
+
+    function r3_p_period_apply() {
+        $('#r3_p_period_button').prop('disabled', true);
+        var data = 'r=' + Math.random();
+        data += '&p1=' + escape($('#r3_p_period1').val());
+        data += '&p2=' + escape($('#r3_p_period2').val());
+        $.post('/Reports/R3/ApplyPeriod', data, function (data) {
+            $('div#r3_p_data_grid_panel').html(data);
+            R3DataListOnLoad();
+            $('#r3_p_period_button').prop('disabled', false);
+        });
+    }
+
+    function R3DataListOnLoad() {
+        $('.report-row').on('dblclick', function (e) {
+            var top = (e.pageY > ($(window).outerHeight() / 2)) ? e.pageY - $('#sud_panel').outerHeight() : e.pageY;
+            var left = (e.pageX > ($(window).outerWidth() / 2)) ? e.pageX - $('#sud_panel').outerWidth() : e.pageX;
+            SudPopupShow(this, top, left);
+        });
+        $('.report-row').on('click', function () {
+            var data = 'r=' + Math.random();
+            data += '&iddoc=' + escape($(this).attr('data-sud-iddoc'));
+            $.post('/Reports/R3/GetHistory', data, function (data) {
+                $('#r3_p_detail_panel').html(data);
+            });
+        });
+    }
+
+    if (typeof (R3DataListOnLoad) !== 'undefined') R3DataListOnLoad();
+
+</script>

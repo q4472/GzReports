@@ -1,0 +1,200 @@
+﻿@model MvcApplication2.Areas.Reports.Models.R1Model
+
+<style type="text/css">
+    .sud_0 {
+    }
+
+    .sud_1 {
+        background-color: #fbb;
+    }
+
+    .note {
+        overflow: hidden;
+        width: 100px;
+    }
+
+    .note_e {
+        overflow: hidden;
+        width: 100px;
+    }
+
+    .note_f {
+        background-color: #bbf;
+        overflow: hidden;
+        width: 100px;
+    }
+</style>
+<script type="text/javascript">
+    function R1ReportOnLoad() {
+        $('.report-row').on('dblclick', function (e) {
+            var top = (e.pageY > ($(window).outerHeight() / 2)) ? e.pageY - $('#sud_panel').outerHeight() : e.pageY;
+            var left = (e.pageX > ($(window).outerWidth() / 2)) ? e.pageX - $('#sud_panel').outerWidth() : e.pageX;
+            SudPopupShow(this, top, left);
+        });
+    }
+</script>
+<table style="margin: 2px;">
+    <colgroup>
+        <col width="100" />
+        <col width="240" />
+        <col width="100" />
+        <col width="100" />
+        <col width="100" />
+        <col width="100" />
+        <col width="60" />
+        <col width="130" />
+        <col width="60" />
+    </colgroup>
+    <tr class="header2">
+        <td colspan="9">Отчёт по неоплаченным отгрузкам</td>
+    </tr>
+    <tr>
+        <td colspan="9">&nbsp;</td>
+    </tr>
+    <tr class="header1">
+        <td class="b">Менеджер/Клиент</td>
+        <td class="b">Договор</td>
+        <td class="b">Счёт</td>
+        <td class="b">Накладная</td>
+        <td class="b">Дата получения</td>
+        <td class="b">Срок оплаты</td>
+        <td class="b">Просрочка</td>
+        <td class="b">Сумма</td>
+        <td class="b">Второй экз. получен</td>
+    </tr>
+
+    @{
+        Double totalSumm = 0;
+        String custName = String.Empty; // Группа 2
+        Double custSumm = 0;
+        Boolean custFlag = false;
+        String emplName = String.Empty; // Группа 1
+        Double emplSumm = 0;
+        Boolean emplFlag = false;
+        if (Model.ReportData != null)
+        {
+            foreach (System.Data.DataRow dr in Model.ReportData.Rows)
+            {
+                if (custName != (String)dr["Клиент"])
+                {
+                    if (custFlag)
+                    {
+                        <tr class="group2">
+                            <td class="b">&nbsp;</td>
+                            <td class="b">&nbsp;</td>
+                            <td class="b">&nbsp;</td>
+                            <td class="b">&nbsp;</td>
+                            <td class="b">&nbsp;</td>
+                            <td class="b">&nbsp;</td>
+                            <td class="b">&nbsp;</td>
+                            <td class="b tar">@custSumm.ToString("n2")</td>
+                            <td class="b">&nbsp;</td>
+                        </tr>
+                    }
+                    custName = (String)dr["Клиент"];
+                    custSumm = 0;
+                    custFlag = true;
+                    emplName = String.Empty;
+                    emplSumm = 0;
+                    emplFlag = false;
+                    <tr>
+                        <td colspan="9" class="b group2">@custName</td>
+                    </tr>
+                }
+                if (emplName != (String)dr["Менеджер"])
+                {
+                    if (emplFlag)
+                    {
+                        <tr class="group1">
+                            <td class="b">&nbsp;</td>
+                            <td class="b">&nbsp;</td>
+                            <td class="b">&nbsp;</td>
+                            <td class="b">&nbsp;</td>
+                            <td class="b">&nbsp;</td>
+                            <td class="b">&nbsp;</td>
+                            <td class="b">&nbsp;</td>
+                            <td class="b tar">@emplSumm.ToString("n2")</td>
+                            <td class="b">&nbsp;</td>
+                        </tr>
+                    }
+                    emplName = (String)dr["Менеджер"];
+                    emplSumm = 0;
+                    emplFlag = true;
+                    <tr>
+                        <td colspan="9" class="b group1">@emplName</td>
+                    </tr>
+                }
+                <tr class="report-row sud_@dr["sud_status_id"]"
+                    data-sud-docno="@dr["Накладная"]"
+                    data-sud-agreement-descr="@dr["Договор"]"
+                    data-sud-iddoc="@dr["sud_iddoc"]"
+                    data-sud-agreement-id="@dr["agreement_id"]"
+                    data-sud-status-id="@dr["sud_status_id"]"
+                    data-sud-stage-id="@dr["sud_stage_id"]"
+                    data-sud-set-of-docs-id="@dr["sud_set_of_docs_id"]"
+                    data-sud-payments-satus-id="@dr["sud_payments_status_id"]"
+                    data-sud-payments-date="@dr["Срок оплаты установленный вручную"]"
+                    data-sud-note="@dr["sud_note"]">
+                    @if ((dr["sud_descr"] == DBNull.Value) || ((String)dr["sud_descr"] == ""))
+                    {
+                        <td class="b"><div class="note_e">@dr["sud_descr"]</div></td>
+                    }
+                    else
+                    {
+                        <td class="b"><div class="note_f">@dr["sud_descr"]</div></td>
+                    }
+                    <td class="b">@dr["Договор"]</td>
+                    <td class="b">@dr["Счёт"]</td>
+                    <td class="b">@dr["Накладная"]</td>
+                    <td class="b tar">@dr["Дата получения"]</td>
+                    <td class="b tar">@dr["Срок оплаты"]</td>
+                    <td class="b tar">@dr["Просрочка"]</td>
+                    <td class="b tar">@Convert.ToDouble(dr["Сумма"]).ToString("n2")</td>
+                    <td class="b">@dr["Второй экз. вернули"]</td>
+                </tr>
+                    emplSumm += Convert.ToDouble(dr["Сумма"]);
+                    custSumm += Convert.ToDouble(dr["Сумма"]);
+                    totalSumm += Convert.ToDouble(dr["Сумма"]);
+            }
+            if (emplFlag)
+            {
+                <tr class="group1">
+                    <td class="b">&nbsp;</td>
+                    <td class="b">&nbsp;</td>
+                    <td class="b">&nbsp;</td>
+                    <td class="b">&nbsp;</td>
+                    <td class="b">&nbsp;</td>
+                    <td class="b">&nbsp;</td>
+                    <td class="b">&nbsp;</td>
+                    <td class="b tar">@emplSumm.ToString("n2")</td>
+                    <td class="b">&nbsp;</td>
+                </tr>
+            }
+            if (custFlag)
+            {
+                <tr class="group2">
+                    <td class="b">&nbsp;</td>
+                    <td class="b">&nbsp;</td>
+                    <td class="b">&nbsp;</td>
+                    <td class="b">&nbsp;</td>
+                    <td class="b">&nbsp;</td>
+                    <td class="b">&nbsp;</td>
+                    <td class="b">&nbsp;</td>
+                    <td class="b tar">@custSumm.ToString("n2")</td>
+                    <td class="b">&nbsp;</td>
+                </tr>
+            }
+            <tr class="group3">
+                <td class="b">Общий итог</td>
+                <td class="b">&nbsp;</td>
+                <td class="b">&nbsp;</td>
+                <td class="b">&nbsp;</td>
+                <td class="b">&nbsp;</td>
+                <td class="b">&nbsp;</td>
+                <td class="b">&nbsp;</td>
+                <td class="b tar">@totalSumm.ToString("n2")</td>
+                <td class="b">&nbsp;</td>
+            </tr>
+        }
+    }
+</table>

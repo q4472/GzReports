@@ -1,0 +1,190 @@
+﻿@model MvcApplication2.Areas.Reports.Models.R2Model
+@{
+    Layout = null;
+}
+
+<style type="text/css">
+    td {
+        padding: 2px;
+    }
+
+    input { /* это надо для валидации. она рисует красную рамку и если её нет то всё смещается.*/
+        border: 1px solid black;
+    }
+
+        input.error {
+            border: 1px solid red;
+        }
+
+    div#p_reports_r2_report {
+        /*overflow: auto;*/
+        width: 100%;
+        height: 800px;
+    }
+
+    .header1 {
+        text-align: center;
+        font-size: 10pt;
+        font-weight: bold;
+    }
+
+    .header2 {
+        text-align: left;
+        font-size: 11pt;
+        font-weight: bold;
+    }
+
+    .group0 {
+        font-size: 11pt;
+        font-weight: bold;
+    }
+
+    .group1 {
+        background-color: #ffffcc;
+        font-size: 11pt;
+    }
+
+    .group2 {
+        background-color: #aaeeee;
+        font-size: 10pt;
+    }
+
+    .group3 {
+        font-size: 9pt;
+    }
+
+    .tar {
+        text-align: right;
+    }
+
+    .b {
+        border: 1px solid black;
+    }
+</style>
+<style type="text/css" media="print">
+    /*
+    div#p_reports_r2_report {
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+    }
+    */
+</style>
+<div>
+    <form id="p_reports_r2_form" novalidate="novalidate" onsubmit="reportsR2Refresh(); return false;">
+        <table>
+            <tr>
+                <td>
+                    @{ Html.RenderPartial("EmploeeFilter", Model); }
+                </td>
+                <td>
+                    <table>
+                        <tr>
+                            <td>Маркетолог</td>
+                            <td>
+                                @if (Model.Marketer)
+                                {
+                                    <input type="checkbox" name="Marketer" checked="checked" />
+                                }
+                                else
+                                {
+                                    <input type="checkbox" name="Marketer" />
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Менеджер</td>
+                            <td>
+                                @if (Model.Manager)
+                                {
+                                    <input type="checkbox" name="Manager" checked="checked" />
+                                }
+                                else
+                                {
+                                    <input type="checkbox" name="Manager" />
+                                }
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td style="border-left: 2px solid black;">
+                    <table>
+                        <tr>
+                            <td class="header1">Период</td>
+                            <td>
+                                <input type="text" name="BeginDate" value="@Model.BeginDate.ToString("yyyy-MM-dd")" style="width: 100px;"
+                                       data-val="true" data-val-date="" data-val-minlength="10"
+                                       onchange="this.value = Nskd.Validator.dateNorm(this.value);" />
+                                <input type="text" name="EndDate" value="@Model.EndDate.ToString("yyyy-MM-dd")" style="width: 100px;"
+                                       data-val="true" data-val-date="" data-val-minlength="10"
+                                       onchange="this.value = Nskd.Validator.dateNorm(this.value);" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <span class="header1">Судебные</span>
+                                @if (Model.IsSudChecked)
+                                {
+                                    <input type="checkbox" name="IsSudChecked" checked="checked" />
+                                }
+                                else
+                                {
+                                    <input type="checkbox" name="IsSudChecked" />
+                                }
+                                <span class="header1">Не судебные</span>
+                                @if (Model.IsOrdChecked)
+                                {
+                                    <input type="checkbox" name="IsOrdChecked" checked="checked" />
+                                }
+                                else
+                                {
+                                    <input type="checkbox" name="IsOrdChecked" />
+                                }
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td style="border-left: 2px solid black;">
+                    <input id="p_reports_r2_submit_button" type="submit" value="Сформировать" />
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+<hr style="line-height: 2px; margin: 4px 0px;" />
+<div id="p_reports_r2_report">
+    <h2>Отчёт по оплатам</h2>
+    <p>Не сформирован.</p>
+</div>
+@{ Html.RenderPartial("~/Areas/Reports/Views/Shared/Sud/SudPopup.cshtml"); }
+<script type="text/javascript">
+
+    //window.onload = function () {
+    onDataLoad();
+    //};
+
+    Nskd.Validator.parse('#p_reports_r2_form');
+
+    function reportsR2Refresh() {
+        $('#p_reports_r2_submit_button').prop('disabled', true);
+        Nskd.Js.post('/Reports/R2/GetReport', 'p_reports_r2_form', onDataLoad, 'p_reports_r2_report', '_layout_footer_loading');
+    }
+
+    function onDataLoad() {
+        $('#p_reports_r2_submit_button').prop('disabled', false);
+        var cFilter = $('#Emploee_ManagerFilter').val();
+        var cCode = $('#Emploee_ManagerSelector').val();
+        if (!((cFilter) || (cCode))) {
+            $('#Emploee_ManagerSelector').prop('disabled', true);
+        }
+
+        var cmCode = $('#Emploee_ManagerMultiSelector').val();
+        if (!((cFilter) || (cmCode))) {
+            $('#Emploee_ManagerMultiSelector').prop('disabled', true);
+        }
+
+        if (typeof (R2ReportOnLoad) !== 'undefined') R2ReportOnLoad();
+
+        $('#_layout_footer_msg').empty().hide();
+    }
+</script>

@@ -1,0 +1,6 @@
+﻿@model MvcApplication2.Areas.Reports.Models.R1Model
+
+<!--
+Html.DropDownListFor(x => x.Emploee.ManagerSelector, Model.Emploee.ManagerSelectList)
+-->
+@Html.DropDownListFor(x => x.Emploee.ManagerMultiSelector, Model.Emploee.ManagerMultiSelectList, new { multiple = "multiple" })

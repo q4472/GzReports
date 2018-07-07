@@ -1,0 +1,129 @@
+﻿@using FarmSib.Base.Models
+@model FarmSib.Base.Models.DataGridView
+<style type="text/css">
+    #p_prep_f0_detail_table td {
+        padding: 2px;
+    }
+
+    .p_prep_f0_detail_table_sect1_input {
+        width: 120px;
+    }
+
+    .p_prep_f0_detail_table_sect2_input {
+        width: 360px;
+    }
+</style>
+<form id="p_prep_f0_detail_form" novalidate="novalidate">
+    <table id="p_prep_f0_detail_table">
+        <tr>
+            @if ((Model != null) && (Model.Rows != null) && (Model.Rows.Count > 0))
+            {
+                Int32 sectCount = 2;
+                for (int si = 0; si < sectCount; si++)
+                {
+                    Int32 ciMin;
+                    Int32 ciMax;
+                    if (si == 0)
+                    {
+                        ciMin = 0;
+                        ciMax = Math.Min(8, Model.Columns.Count);
+                    }
+                    else
+                    {
+                        ciMin = 8;
+                        ciMax = Model.Columns.Count;
+                    }
+                    <td>
+                        <table>
+                            @for (int ci = ciMin; ci < ciMax; ci++)
+                            {
+                                DataGridColumn col = Model.Columns[ci];
+                                String dn = (col.IsVisible) ? "" : "display: none;";
+                                <tr style="@dn">
+                                    <td>@col.Caption</td>
+                                    <td>
+                                        @if ((Model.PrimaryKey.Count > 0) && (col.Id == Model.PrimaryKey[0].Id))
+                                        {
+                                            @Html.TextBox(Model.Columns[ci].ColumnName, Model.Rows[0][ci].ToString(), new { disabled = "disabled" })
+                                        }
+                                        else
+                                        {
+                                            switch (col.DataType.ToString())
+                                            {
+                                                case "System.Int32":
+                                                    <input type="text"
+                                                           name="@Model.Columns[ci].ColumnName"
+                                                           value="@(((DataGridCell)Model.Rows[0].ItemArray[ci]).ToHtmlString())"
+                                                           onkeyup="PrepF0Detail.setUpdateMark(this);"
+                                                           onchange="PrepF0Detail.setUpdateMark(this); Nskd.Validator.nNorm(this, 0);"
+                                                           style="text-align: right"
+                                                           class="@((si == 0) ? "p_prep_f0_detail_table_sect1_input" : "p_prep_f0_detail_table_sect2_input")" />
+                                                    break;
+                                                case "System.DateTime":
+                                                    String datetime = "";
+                                                    Object value = ((DataGridCell)Model.Rows[0].ItemArray[ci]).Value;
+                                                    if (value != null) { datetime = ((DateTime)value).ToString("yyyy-MM-dd"); }
+                                                    <input type="text"
+                                                           name="@Model.Columns[ci].ColumnName"
+                                                           value="@datetime"
+                                                           onkeyup="PrepF0Detail.setUpdateMark(this);"
+                                                           onchange="this.value = Nskd.Validator.dateNorm(this.value); PrepF0Detail.setUpdateMark(this);"
+                                                           data-val="true" data-val-date="" data-val-minlength="10"
+                                                           style="text-align: right"
+                                                           class="@((si == 0) ? "p_prep_f0_detail_table_sect1_input" : "p_prep_f0_detail_table_sect2_input")" />
+                                                    break;
+                                                case "System.Double":
+                                                <input type="text"
+                                                       name="@Model.Columns[ci].ColumnName"
+                                                       value="@String.Format("{0:# ### ##0.00}", Model.Rows[0][ci])"
+                                                       onkeyup="PrepF0Detail.setUpdateMark(this);"
+                                                       onchange="PrepF0Detail.setUpdateMark(this); Nskd.Validator.nNorm(this, 2)"
+                                                       style="text-align: right"
+                                                       class="@((si == 0) ? "p_prep_f0_detail_table_sect1_input" : "p_prep_f0_detail_table_sect2_input")" />
+                                                    break;
+                                                default:
+                                                <input type="text"
+                                                       name="@Model.Columns[ci].ColumnName"
+                                                       value="@(((DataGridCell)Model.Rows[0].ItemArray[ci]).ToHtmlString())"
+                                                       onkeyup="PrepF0Detail.setUpdateMark(this);"
+                                                       onchange="PrepF0Detail.setUpdateMark(this);"
+                                                       class="@((si == 0) ? "p_prep_f0_detail_table_sect1_input" : "p_prep_f0_detail_table_sect2_input")" />
+                                                    break;
+                                            }
+                                        }
+                                    </td>
+                                    <td>&nbsp;&nbsp;</td>
+                                </tr>
+                            }
+                        </table>
+                    </td>
+                }
+            }
+        </tr>
+    </table>
+</form>
+<script type="text/javascript">
+    var PrepF0Detail = (function () {
+        Nskd.Validator.parse('#p_prep_f0_detail_form');
+        PrepF0Command.setControlButtonsDisabled(true, false, false);
+        return {
+            setUpdateMark: function (element) {
+                var tr = element;
+                while (tr != null && tr.nodeName != 'TR') tr = tr.parentNode;
+                $(tr).find('td:last').text('*');
+                PrepF0Command.setControlButtonsDisabled(false, null, null);
+            },
+            getFormDataV2: function () {
+                var pars = [];
+                $('#p_prep_f0_detail_table input').each(function (index, element) {
+                    pars.push({ Name: element.name, Value: element.value });
+                });
+                return pars;
+            },
+            clearForm: function () {
+                $('#p_prep_f0_detail_form input').val('');
+            }
+        };
+    })();
+</script>
+

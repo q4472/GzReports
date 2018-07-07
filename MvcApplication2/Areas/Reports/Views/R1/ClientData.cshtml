@@ -1,0 +1,35 @@
+﻿@model MvcApplication2.Areas.Reports.Models.R1Model
+<script type="text/javascript">
+    function RemoveClientFilter() {
+        $('#Client_ClientFilter').val('');
+        var cSelector = $('#Client_ClientSelector');
+        cSelector.empty();
+        cSelector.prop('disabled', true);
+    }
+    function getClientSelector() {
+        var data = 'r=' + Math.random();
+        data += '&Client.ClientFilter=' + escape($('#Client_ClientFilter').val());
+        $.post(
+            '/Reports/R1/GetClientSelector',
+            data,
+            function (data) {
+                $('#client-selector').html(data);
+            }
+        );
+    }
+</script>
+<table>
+    <tr>
+        <td class="header1">Клиент</td>
+        <td>
+            @Html.TextBoxFor(x => x.Client.ClientFilter)
+            <input type="button" value="⇓" onclick="getClientSelector();">
+            <input type="button" value="X" onclick="RemoveClientFilter();" />
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" id="client-selector">
+            @{ Html.RenderPartial("ClientSelector", Model); }
+        </td>
+    </tr>
+</table>

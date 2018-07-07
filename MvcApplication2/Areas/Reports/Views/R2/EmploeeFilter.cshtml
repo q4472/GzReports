@@ -1,0 +1,59 @@
+﻿@model MvcApplication2.Areas.Reports.Models.R2Model
+<style type="text/css">
+    select#Emploee_ManagerSelector {
+        width: 300px;
+    }
+
+        select#Emploee_ManagerSelector:disabled {
+            background-color: #eee;
+        }
+
+    select#Emploee_ManagerMultiSelector {
+        width: 300px;
+    }
+
+        select#Emploee_ManagerMultiSelector:disabled {
+            background-color: #eee;
+        }
+</style>
+<script type="text/javascript">
+    function RemoveEmploeeFilter() {
+        $('#Emploee_ManagerFilter').val('');
+        var mSelector = $('#Emploee_ManagerSelector');
+        mSelector.empty();
+        mSelector.prop('disabled', true);
+        var mmSelector = $('#Emploee_ManagerMultiSelector');
+        mmSelector.empty();
+        mmSelector.prop('disabled', true);
+    }
+    function getEmploeeSelector() {
+        var data = 'r=' + Math.random();
+        data += '&Emploee.ManagerFilter=' + escape($('#Emploee_ManagerFilter').val());
+        //if ((typeof (Nskd) !== 'undefined') && (Nskd.Server)) { data += '&SessionId=' + Nskd.Server.SessionId; }
+        $.post(
+            '/Reports/R2/GetEmploeeSelector',
+            data,
+            function (data) {
+                $('#pEmploeeSelector').html(data);
+            }
+        );
+    }
+</script>
+<table>
+    <tr>
+        <td class="header1">Сотрудник</td>
+        <td>
+            @Html.TextBoxFor(x => x.Emploee.ManagerFilter)
+            <input type="button" value="⇓" onclick="getEmploeeSelector();">
+            <input type="button" value="X" onclick="RemoveEmploeeFilter();" />
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" id="pEmploeeSelector">
+            <!--
+                Html.DropDownListFor(x => x.Emploee.ManagerMultiSelector, Model.Emploee.ManagerMultiSelectList, new { multiple = "multiple" })
+            -->
+            @Html.DropDownListFor(x => x.Emploee.ManagerSelector, Model.Emploee.ManagerSelectList)
+        </td>
+    </tr>
+</table>
