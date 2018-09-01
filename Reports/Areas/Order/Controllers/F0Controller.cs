@@ -3,7 +3,6 @@ using MvcApplication2.Areas.Env.Models;
 using MvcApplication2.Areas.Order.Models;
 using Nskd;
 using System;
-using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace MvcApplication2.Areas.Order.Controllers
@@ -13,7 +12,7 @@ namespace MvcApplication2.Areas.Order.Controllers
         public Object Index(String sessionId)
         {
             F0Model m = new F0Model(sessionId);
-            return View("~/Areas/Order/Views/F0/Index.cshtml", m);
+            return PartialView("~/Areas/Order/Views/F0/Index.cshtml", m);
         }
         public Object ApplyFilter()
         {

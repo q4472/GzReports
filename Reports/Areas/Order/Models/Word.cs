@@ -175,7 +175,7 @@ namespace TestWord
 
                         TableRow tableRow7 = table2.AppendChild(new TableRow());
                         {
-                            tableRow7.AppendChild(GenerateTableCell("№", null, "Center", "Center"));
+                            tableRow7.AppendChild(GenerateTableCell("№"+(i+1).ToString(), null, "Center", "Center"));
                             tableRow7.AppendChild(GenerateTableCell("Параметр", null, "Center", "Center", 2));
                             tableRow7.AppendChild(GenerateTableCell("Требуемое значение", null, "Center", "Center", 4));
                         }
@@ -251,7 +251,8 @@ namespace TestWord
                         if (dr["страна"] != DBNull.Value
                             && !String.IsNullOrWhiteSpace((String)dr["страна"])
                             && ((String)dr["страна"] == "Россия"
-                            || (String)dr["страна"] == "Белоруссия"
+                            || (String)dr["страна"] == "Беларуссия"
+                            || (String)dr["страна"] == "Республика Беларусь"
                             || (String)dr["страна"] == "Армения"
                             || (String)dr["страна"] == "Казахстан"
                             || (String)dr["страна"] == "Таджикистан"))
@@ -648,7 +649,8 @@ namespace TestWord
                         if (dr["страна"] != DBNull.Value
                             && !String.IsNullOrWhiteSpace((String)dr["страна"])
                             && (String)dr["страна"] != "Россия"
-                            && (String)dr["страна"] != "Белоруссия"
+                            && (String)dr["страна"] != "Беларуссия"
+                            && (String)dr["страна"] != "Республика Беларусь"
                             && (String)dr["страна"] != "Армения"
                             && (String)dr["страна"] != "Казахстан"
                             && (String)dr["страна"] != "Таджикистан")

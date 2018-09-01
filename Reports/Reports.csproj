@@ -194,10 +194,24 @@
     <Compile Include="Areas\Settings\SettingsAreaRegistration.cs" />
     <Compile Include="Areas\Tn\TnAreaRegistration.cs" />
     <Compile Include="Areas\Tn\Controllers\TnController.cs" />
+    <Compile Include="Controllers\DgvController.cs" />
+    <Compile Include="Controllers\FsController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ItemsController.cs" />
+    <Compile Include="Data\HomeData.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Areas\Tn\Models\TnModel.cs" />
+    <Compile Include="Lib\Nskd.Convert.cs" />
+    <Compile Include="Lib\Nskd.Npc.cs" />
+    <Compile Include="Lib\Utility.cs" />
+    <Compile Include="Models\DataGridView.cs" />
+    <Compile Include="Models\DgvModel.cs" />
+    <Compile Include="Models\FileSystem.cs" />
+    <Compile Include="Models\HomeModel.cs" />
+    <Compile Include="Models\NskdExcel.cs" />
+    <Compile Include="Models\OpenXmlDocument.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -436,12 +450,6 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Base\Base.csproj">
-      <Project>{15599199-44ac-4e8c-86a6-be79c8e74c30}</Project>
-      <Name>Base</Name>
-    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
