@@ -1,28 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using MvcApplication2.Models;
-using FarmSib.Base.Models;
 
 namespace MvcApplication2.Controllers
 {
     public class R2Controller : Controller
     {
-        public ActionResult Index()
+        public Object Index()
         {
-            R2Model m = new R2Model();
-            return View(m);
+            Object v = null;
+            var m = new R2Model();
+            if (ControllerContext.HttpContext.IsDebuggingEnabled)
+                v = View("~/Views/R2/Index.cshtml", m); // _ViewStart.cshtml
+            else
+                v = PartialView("~/Views/R2/Index.cshtml", m);
+            return v;
         }
-        public PartialViewResult GetEmploeeSelector(R2Model m) //, String SessionId)
+        public Object GetEmploeeSelector(R2Model m) //, String SessionId)
         {
             //NskdSessionLite session = NskdSessionLite.GetById(SessionId);
             m.Emploee.FillManagerData();
             m.Emploee.ManagerSelector = "-1";
             return PartialView("EmploeeSelector", m);
         }
-        public PartialViewResult GetReport(R2Model m)
+        public Object GetReport(R2Model m)
         {
             m.GetReport();
             return PartialView("Report", m);
