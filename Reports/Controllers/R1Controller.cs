@@ -1,19 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using FarmSib.Base.Models;
 using MvcApplication2.Models;
 
 namespace MvcApplication2.Controllers
 {
     public class R1Controller : Controller
     {
-        public ActionResult Index()
+        public Object Index()
         {
+            Object v = null;
             R1Model m = new R1Model();
-            return View(m);
+            if (ControllerContext.HttpContext.IsDebuggingEnabled)
+                v = View("~/Views/R1/Index.cshtml", m); // _ViewStart.cshtml
+            else
+                v = PartialView("~/Views/R1/Index.cshtml", m);
+            return v;
         }
         public PartialViewResult GetClientSelector(R1Model m)
         {
