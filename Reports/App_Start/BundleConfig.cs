@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Optimization;
 
-namespace FarmSib.MvcApplication2
+namespace MvcApplication2
 {
     public class BundleConfig
     {
