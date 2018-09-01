@@ -4,9 +4,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using FarmSib.Base.Models;
-using MvcApplication2.Areas.Reports.Models;
+using MvcApplication2.Models;
 
-namespace MvcApplication2.Areas.Reports.Controllers
+namespace MvcApplication2.Controllers
 {
     public class R1Controller : Controller
     {

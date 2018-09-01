@@ -8,7 +8,7 @@ using System.Web;
 using FarmSib.Base.Data;
 using FarmSib.Base.Models;
 
-namespace MvcApplication2.Areas.Reports.Models
+namespace MvcApplication2.Models
 {
     public class R3Model
     {

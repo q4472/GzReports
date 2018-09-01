@@ -5,7 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Web;
 
-namespace MvcApplication2.Areas.Reports.Models
+namespace MvcApplication2.Models
 {
     public class SudModel
     {

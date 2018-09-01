@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using MvcApplication2.Areas.Reports.Models;
+using MvcApplication2.Models;
 
-namespace MvcApplication2.Areas.Reports.Controllers
+namespace MvcApplication2.Controllers
 {
     public class SudController : Controller
     {

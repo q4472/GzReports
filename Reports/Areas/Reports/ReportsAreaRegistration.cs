@@ -1,6 +1,6 @@
 ﻿using System.Web.Mvc;
 
-namespace MvcApplication2.Areas.Reports
+namespace MvcApplication2
 {
     public class ReportsAreaRegistration : AreaRegistration
     {

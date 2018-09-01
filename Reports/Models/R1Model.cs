@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 
-namespace MvcApplication2.Areas.Reports.Models
+namespace MvcApplication2.Models
 {
     public class R1Model
     {
