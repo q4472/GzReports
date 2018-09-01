@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using System.IO;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Web;
 using System.Web.Mvc;
 using FarmSib.Base.Data;
 
@@ -75,7 +70,6 @@ namespace FarmSib.Base.Models
             return dv.ToTable();
         }
     }
-
     public class CommonModel
     {
         public NskdSessionLite Session;
@@ -292,7 +286,6 @@ namespace FarmSib.Base.Models
             }
         }
     }
-
     public class NskdSessionLite
     {
         public Guid SessionId;
@@ -328,5 +321,4 @@ namespace FarmSib.Base.Models
             return session;
         }
     }
-
 }

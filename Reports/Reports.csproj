@@ -140,10 +140,7 @@
     <Compile Include="Models\R2Model.cs" />
     <Compile Include="Models\R3Model.cs" />
     <Compile Include="Models\SudModel.cs" />
-    <Compile Include="Controllers\DgvController.cs" />
-    <Compile Include="Controllers\FsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\ItemsController.cs" />
     <Compile Include="Data\HomeData.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -152,8 +149,6 @@
     <Compile Include="Lib\Nskd.Npc.cs" />
     <Compile Include="Lib\Utility.cs" />
     <Compile Include="Models\DataGridView.cs" />
-    <Compile Include="Models\DgvModel.cs" />
-    <Compile Include="Models\FileSystem.cs" />
     <Compile Include="Models\HomeModel.cs" />
     <Compile Include="Models\NskdExcel.cs" />
     <Compile Include="Models\OpenXmlDocument.cs" />
@@ -283,7 +278,6 @@
     <Content Include="Views\Shared\Imgs\img.zip" />
     <Content Include="Views\Shared\Fs\Index.cshtml" />
     <Content Include="Views\Shared\DataGridView\Show.cshtml" />
-    <Content Include="Views\Shared\DataGridView\Edit.cshtml" />
     <Content Include="Views\Shared\LeftSection.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>
