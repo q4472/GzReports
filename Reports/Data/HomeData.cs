@@ -163,18 +163,18 @@ namespace FarmSib.Base.Data
                 RequestPackage rqp = new RequestPackage();
                 rqp.Command = "[Garza].[dbo].[Отчёт по неоплаченным отгрузкам]";
                 rqp.Parameters = new RequestParameter[] {
-                new RequestParameter("client_filter", clientFilter),
-                new RequestParameter("client_code", clientCode),
-                new RequestParameter("manager_filter", managerFilter),
-                new RequestParameter("manager_code", managerCode),
-                new RequestParameter("emploee_multi_code", managerMultiCode),
-                new RequestParameter("pr1", pr1),
-                new RequestParameter("pr2", pr2),
-                new RequestParameter("date", onDate),
-                new RequestParameter("sud", sud),
-                new RequestParameter("ord", ord),
-                new RequestParameter("sec", sec)
-            };
+                    new RequestParameter("client_filter", clientFilter),
+                    new RequestParameter("client_code", clientCode),
+                    new RequestParameter("manager_filter", managerFilter),
+                    new RequestParameter("manager_code", managerCode),
+                    new RequestParameter("emploee_multi_code", managerMultiCode),
+                    new RequestParameter("pr1", pr1),
+                    new RequestParameter("pr2", pr2),
+                    new RequestParameter("date", onDate),
+                    new RequestParameter("sud", sud),
+                    new RequestParameter("ord", ord),
+                    new RequestParameter("sec", sec)
+                };
                 dt = GetFirstTable(Execute(rqp));
                 return dt;
             }
@@ -192,18 +192,18 @@ namespace FarmSib.Base.Data
             {
                 DataTable dt = null;
                 RequestPackage rqp = new RequestPackage();
-                rqp.Command = "[dbo].[ОтчетПоОплатам]";
+                rqp.Command = "[Garza].[dbo].[ОтчетПоОплатам]";
                 rqp.Parameters = new RequestParameter[] {
-                new RequestParameter("НачПериода", beginDate),
-                new RequestParameter("КонПериода", endDate),
-                new RequestParameter("emploee_filter", emploeeFilter),
-                new RequestParameter("emploee_code", emploeeCode),
-                new RequestParameter("emploee_multi_code", emploeeMultiCode),
-                new RequestParameter("marketer", marketer),
-                new RequestParameter("manager", manager),
-                new RequestParameter("sud", sud),
-                new RequestParameter("ord", ord)
-            };
+                    new RequestParameter("НачПериода", beginDate),
+                    new RequestParameter("КонПериода", endDate),
+                    new RequestParameter("emploee_filter", emploeeFilter),
+                    new RequestParameter("emploee_code", emploeeCode),
+                    new RequestParameter("emploee_multi_code", emploeeMultiCode),
+                    new RequestParameter("marketer", marketer),
+                    new RequestParameter("manager", manager),
+                    new RequestParameter("sud", sud),
+                    new RequestParameter("ord", ord)
+                };
                 dt = GetFirstTable(Execute(rqp));
                 return dt;
             }
@@ -218,24 +218,24 @@ namespace FarmSib.Base.Data
                 String sessionId)
             {
                 RequestPackage rqp = new RequestPackage();
-                rqp.Command = "[dbo].[судебные_документы_upsert]";
+                rqp.Command = "[Garza].[dbo].[судебные_документы_upsert]";
                 rqp.Parameters = new RequestParameter[] {
-                new RequestParameter("iddoc", iddoc),
-                new RequestParameter("status_id", status_id),
-                new RequestParameter("stage_id", stage_id),
-                new RequestParameter("set_of_docs_id", set_of_docs_id),
-                new RequestParameter("payments_status_id", payments_status_id),
-                new RequestParameter("payment_date", payment_date),
-                new RequestParameter("note", note),
-                new RequestParameter("session_id", sessionId)
-            };
+                    new RequestParameter("iddoc", iddoc),
+                    new RequestParameter("status_id", status_id),
+                    new RequestParameter("stage_id", stage_id),
+                    new RequestParameter("set_of_docs_id", set_of_docs_id),
+                    new RequestParameter("payments_status_id", payments_status_id),
+                    new RequestParameter("payment_date", payment_date),
+                    new RequestParameter("note", note),
+                    new RequestParameter("session_id", sessionId)
+                };
                 Execute(rqp);
             }
             public static DataTable GetR3DataList(DateTime? d1 = null, DateTime? d2 = null)
             {
                 DataTable dt = null;
                 RequestPackage rqp = new RequestPackage();
-                rqp.Command = "[dbo].[судебные_документы_отчёт]";
+                rqp.Command = "[Garza].[dbo].[судебные_документы_отчёт]";
                 rqp.Parameters = new RequestParameter[] {
                 new RequestParameter("d1", d1),
                 new RequestParameter("d2", d2)
@@ -247,7 +247,7 @@ namespace FarmSib.Base.Data
             {
                 DataTable dt = null;
                 RequestPackage rqp = new RequestPackage();
-                rqp.Command = "[dbo].[судебные_документы_отчёт_по_истории_документа]";
+                rqp.Command = "[Garza].[dbo].[судебные_документы_отчёт_по_истории_документа]";
                 rqp.Parameters = new RequestParameter[] {
                 new RequestParameter("iddoc", iddoc)
             };
@@ -258,7 +258,7 @@ namespace FarmSib.Base.Data
             {
                 DataTable dt = null;
                 RequestPackage rqp = new RequestPackage();
-                rqp.Command = "[dbo].[судебные_документы_отчёт_по_истории]";
+                rqp.Command = "[Garza].[dbo].[судебные_документы_отчёт_по_истории]";
                 dt = GetFirstTable(Execute(rqp));
                 return dt;
             }
