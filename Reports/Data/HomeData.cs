@@ -146,7 +146,6 @@ namespace FarmSib.Base.Data
         }
         public class Reports
         {
-
             public static DataTable GetReport1(
                 String clientFilter = null,
                 String clientCode = null,
@@ -162,7 +161,7 @@ namespace FarmSib.Base.Data
             {
                 DataTable dt = null;
                 RequestPackage rqp = new RequestPackage();
-                rqp.Command = "[dbo].[Отчёт по неоплаченным отгрузкам]";
+                rqp.Command = "[Garza].[dbo].[Отчёт по неоплаченным отгрузкам]";
                 rqp.Parameters = new RequestParameter[] {
                 new RequestParameter("client_filter", clientFilter),
                 new RequestParameter("client_code", clientCode),
@@ -179,7 +178,6 @@ namespace FarmSib.Base.Data
                 dt = GetFirstTable(Execute(rqp));
                 return dt;
             }
-
             public static DataTable GetReport2(
                 String emploeeFilter = null,
                 String emploeeCode = null,
@@ -233,7 +231,6 @@ namespace FarmSib.Base.Data
             };
                 Execute(rqp);
             }
-
             public static DataTable GetR3DataList(DateTime? d1 = null, DateTime? d2 = null)
             {
                 DataTable dt = null;
@@ -246,7 +243,6 @@ namespace FarmSib.Base.Data
                 dt = GetFirstTable(Execute(rqp));
                 return dt;
             }
-
             public static DataTable GetR3HistoryList(String iddoc)
             {
                 DataTable dt = null;
@@ -258,7 +254,6 @@ namespace FarmSib.Base.Data
                 dt = GetFirstTable(Execute(rqp));
                 return dt;
             }
-
             public static DataTable GetR3CrossTable()
             {
                 DataTable dt = null;
