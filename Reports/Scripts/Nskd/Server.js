@@ -86,10 +86,9 @@ Nskd.Server.JsonRequest = {
 };
 
 Nskd.Server.gotoTheNewPage = function (data, targetSelector) {
-
     // это новое (для Фарм-сиб 2015-09-03)
     var url = Nskd.Client.EnvVars.selectedMenuNodeUrl;
-    if (url) {
+    if (url && url != 'null') {
         var sessionId = Nskd.Server.SessionId;
         if (!sessionId) sessionId = '00000000-0000-0000-0000-000000000000';
         var jqXHR = $.post(url, 'sessionId=' + sessionId, function (data) {

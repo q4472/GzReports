@@ -149,8 +149,6 @@
     <Compile Include="Lib\Utility.cs" />
     <Compile Include="Models\DataGridView.cs" />
     <Compile Include="Models\HomeModel.cs" />
-    <Compile Include="Models\NskdExcel.cs" />
-    <Compile Include="Models\OpenXmlDocument.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

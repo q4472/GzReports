@@ -38,7 +38,7 @@ namespace FarmSib.Base.Data
             {
                 DataTable dt = null;
                 RequestPackage rqp = new RequestPackage();
-                rqp.Command = "[dbo].[session_get_by_id]";
+                rqp.Command = "[phs_s].[dbo].[session_get_by_id]";
                 rqp.Parameters = new RequestParameter[] {
                     new RequestParameter ("id", id)
                 };
@@ -49,7 +49,7 @@ namespace FarmSib.Base.Data
             {
                 DataTable dt = null;
                 RequestPackage rqp = new RequestPackage();
-                rqp.Command = "[dbo].[oc_клиенты_select]";
+                rqp.Command = "[Garza].[dbo].[oc_клиенты_select]";
                 rqp.Parameters = new RequestParameter[] {
                 new RequestParameter ( "DESCR", filter)
             };
@@ -60,88 +60,12 @@ namespace FarmSib.Base.Data
             {
                 DataTable dt = null;
                 RequestPackage rqp = new RequestPackage();
-                rqp.Command = "[dbo].[oc_сотрудники_select]";
+                rqp.Command = "[Garza].[dbo].[oc_сотрудники_select]";
                 rqp.Parameters = new RequestParameter[] {
                 new RequestParameter ("DESCR", filter)
             };
                 dt = GetFirstTable(Execute(rqp));
                 return dt;
-            }
-            public static DataTable GetMnnItems(String[] srcs)
-            {
-                DataTable dt = null;
-                RequestPackage rqp = new RequestPackage
-                {
-                    Command = "[dbo].[мнн]",
-                };
-                if (srcs != null)
-                {
-                    rqp.Parameters = new RequestParameter[srcs.Length];
-                    for (int i = 0; i < Math.Min(6, srcs.Length); i++)
-                    {
-                        String name = "src" + (i + 1).ToString();
-                        String value = srcs[i];
-                        rqp.Parameters[i] = new RequestParameter(name, value);
-                    }
-                }
-                dt = GetFirstTable(Execute(rqp));
-                return dt;
-            }
-            public static DataSet GetTnItems(Guid session_id, String[] srcs, String[] terms, String mnn, Boolean exactly, Boolean eRu, Int32 pageNumber)
-            {
-                DataSet ds = null;
-                RequestPackage rqp = new RequestPackage
-                {
-                    Command = "[dbo].[тн]"
-                };
-                Int32 pi = 0;
-                if (srcs != null)
-                {
-                    Int32 len =
-                        1 +                                                 // session_id
-                        Math.Min(6, ((srcs == null) ? 0 : srcs.Length)) +   // srcs
-                        Math.Min(9, ((terms == null) ? 0 : terms.Length)) + // terms
-                        ((mnn == null) ? 0 : 1) +                           // mnn
-                        1 +                                                 // exactly
-                        1 +                                                 // eRu
-                        1;                                                  // pageNumber
-                    rqp.Parameters = new RequestParameter[len];
-                    rqp.Parameters[pi++] = new RequestParameter("session_id", session_id);
-                    for (int i = 0; i < Math.Min(6, srcs.Length); i++)
-                    {
-                        String name = "src" + (i + 1).ToString();
-                        String value = srcs[i];
-                        rqp.Parameters[pi++] = new RequestParameter(name, value);
-                    }
-                }
-                if (terms != null)
-                {
-                    for (int i = 0; i < Math.Min(9, terms.Length); i++)
-                    {
-                        String name = "term" + (i + 1).ToString();
-                        String value = terms[i];
-                        rqp.Parameters[pi++] = new RequestParameter(name, value);
-                    }
-                }
-                if (mnn != null)
-                {
-                    rqp.Parameters[pi++] = new RequestParameter("mnn", mnn);
-                }
-                rqp.Parameters[pi++] = new RequestParameter("exactly", exactly);
-                rqp.Parameters[pi++] = new RequestParameter("eRu", eRu);
-                rqp.Parameters[pi++] = new RequestParameter("PageNumber", pageNumber);
-                ds = Execute(rqp);
-                return ds;
-            }
-            public static DataSet GetTnItemsLP(String rn)
-            {
-                DataSet ds = null;
-                RequestPackage rqp = new RequestPackage();
-                rqp.Command = "[dbo].[тн_цены]";
-                rqp.Parameters = new RequestParameter[1];
-                rqp.Parameters[0] = new RequestParameter("rn", rn);
-                ds = Execute(rqp);
-                return ds;
             }
         }
         public class Reports
@@ -269,7 +193,7 @@ namespace FarmSib.Base.Data
             {
                 DataTable dt = null;
                 RequestPackage rqp = new RequestPackage();
-                rqp.Command = "[dbo].[судебный_статус_и_email_by_iddoc]";
+                rqp.Command = "[Garza].[dbo].[судебный_статус_и_email_by_iddoc]";
                 rqp.Parameters = new RequestParameter[] {
                         new RequestParameter("iddoc", iddoc )
                     };
@@ -300,33 +224,6 @@ namespace FarmSib.Base.Data
                     new RequestParameter { Name = "msg", Value = msg }
                 };
                 ExecuteSssp(rqp);
-            }
-        }
-        public class Settings
-        {
-            public static DataSet Get(Guid sessionId)
-            {
-                DataSet ds = null;
-                RequestPackage rqp = new RequestPackage();
-                rqp.SessionId = sessionId;
-                rqp.Command = "[dbo].[settings_get]";
-                rqp.Parameters = new RequestParameter[] {
-                    new RequestParameter("session_id", sessionId)
-                };
-                ds = Execute(rqp);
-                return ds;
-            }
-            public static void UpdateRow(Guid sessionId, Int32 id, String value)
-            {
-                RequestPackage rqp = new RequestPackage();
-                rqp.SessionId = sessionId;
-                rqp.Command = "[dbo].[settings_update_row]";
-                rqp.Parameters = new RequestParameter[] {
-                    new RequestParameter("session_id", sessionId),
-                    new RequestParameter("id", id),
-                    new RequestParameter("value", value)
-                };
-                Execute(rqp);
             }
         }
         private static void AddSessionIdToParameters(RequestPackage rqp)
@@ -416,18 +313,6 @@ namespace FarmSib.Base.Data
                 r = dt.Rows[0][0];
             }
             return r;
-        }
-        public static DataTable GetFsInfoCommon(String fileId, String link, String type = null)
-        {
-            RequestPackage rqp = new RequestPackage();
-            rqp.Command = "[dbo].[file_info_get]";
-            rqp.Parameters = new RequestParameter[] {
-                new RequestParameter("file_id", fileId ),
-                new RequestParameter("link", link ),
-                new RequestParameter("type", type )
-            };
-            DataTable dt = GetFirstTable(Execute(rqp));
-            return dt;
         }
     }
 }
