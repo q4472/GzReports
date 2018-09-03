@@ -272,7 +272,6 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Imgs\img.zip" />
-    <Content Include="Views\Shared\Fs\Index.cshtml" />
     <Content Include="Views\Shared\DataGridView\Show.cshtml" />
     <Content Include="Views\Shared\LeftSection.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
