@@ -39,6 +39,7 @@ namespace MvcApplication2.Controllers
         {
             Object r = "Reports.Controllers.R1Controller.SaveDocsRetComm()\n";
             RequestPackage rqp = RequestPackage.ParseRequest(Request.InputStream, Request.ContentEncoding);
+            rqp.AddSessionIdToParameters();
             r += Nskd.JsonV3.ToString(rqp) + "\n";
             ResponsePackage rsp = rqp.GetResponse("http://127.0.0.1:11012/");
             DataTable dt = rsp.GetFirstTable();
