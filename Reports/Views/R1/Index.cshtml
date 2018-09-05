@@ -99,7 +99,7 @@
                     <table>
                         <tr>
                             <td class="header1">На дату</td>
-                            <td>
+                            <td colspan="3">
                                 <input type="text" name="OnDate" value="@Model.OnDate.ToString("yyyy-MM-dd")" style="width: 100px;"
                                        data-val="true" data-val-date="" data-val-minlength="10"
                                        onchange="this.value = Nskd.Validator.dateNorm(this.value);" />
@@ -107,7 +107,7 @@
                         </tr>
                         <tr>
                             <td class="header1">Просрочка</td>
-                            <td>
+                            <td colspan="3">
                                 <input type="text" name="Pr1" value="@Model.Pr1" style="width: 47px;"
                                        data-val="true" data-val-number="" data-val-min="0"
                                        onchange="this.value = Nskd.Validator.numberNorm(this.value);" />
@@ -130,8 +130,6 @@
                                     <input type="checkbox" name="IsSudChecked" />
                                 }
                             </td>
-                        </tr>
-                        <tr>
                             <td>
                                 <span class="header1">Не судебные</span>
                             </td>
@@ -148,10 +146,16 @@
                         </tr>
                         <tr>
                             <td>
-                                <span class="header1">Второй экз.</span>
+                                <span class="header1">Второй экз. есть</span>
                             </td>
                             <td>
                                 <input type="checkbox" name="IsSecondCopyRecived" />
+                            </td>
+                            <td>
+                                <span class="header1">Второй экз. нет</span>
+                            </td>
+                            <td>
+                                <input type="checkbox" disabled="disabled" />
                             </td>
                         </tr>
                     </table>

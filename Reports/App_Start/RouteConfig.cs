@@ -15,6 +15,12 @@ namespace MvcApplication2
             {
                 routes.MapRoute(
                     name: null,
+                    url: "Reports/R1/SaveDocsRetComm/{*pathInfo}",
+                    defaults: new { controller = "R1", action = "SaveDocsRetComm" }
+                    );
+
+                routes.MapRoute(
+                    name: null,
                     url: "Reports/R1/GetClientSelector/{*pathInfo}",
                     defaults: new { controller = "R1", action = "GetClientSelector" }
                     );

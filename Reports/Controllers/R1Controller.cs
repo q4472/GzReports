@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using MvcApplication2.Models;
+using Nskd;
 
 namespace MvcApplication2.Controllers
 {
@@ -32,6 +33,15 @@ namespace MvcApplication2.Controllers
         {
             m.GetReport();
             return PartialView("Report", m);
+        }
+        public Object SaveDocsRetComm()
+        {
+            Object r = "Reports.Controllers.R1Controller.SaveDocsRetComm()\n";
+            RequestPackage rqp = RequestPackage.ParseRequest(Request.InputStream, Request.ContentEncoding);
+            r += Nskd.JsonV3.ToString(rqp) + "\n";
+            ResponsePackage rsp = rqp.GetResponse("http://127.0.0.1:11012/");
+            r += Nskd.JsonV3.ToString(rsp) + "\n";
+            return r;
         }
     }
 }

@@ -1,26 +1,29 @@
 ﻿@model MvcApplication2.Models.R1Model
 <style type="text/css">
-    .sud_0 {
+    #reports_views_r1_report .sud_0 {
     }
 
-    .sud_1 {
+    #reports_views_r1_report .sud_1 {
         background-color: #fbb;
     }
 
-    .note {
+    #reports_views_r1_report .note {
         overflow: hidden;
         width: 100px;
     }
 
-    .note_e {
+    #reports_views_r1_report .note_e {
         overflow: hidden;
         width: 100px;
     }
 
-    .note_f {
+    #reports_views_r1_report .note_f {
         background-color: #bbf;
         overflow: hidden;
         width: 100px;
+    }
+    #reports_views_r1_report .docs-ret {
+        background-color: #bfb;
     }
 </style>
 <div id="reports_views_r1_report">
@@ -141,7 +144,7 @@
                         <td class="b tar">@dr["Срок оплаты"]</td>
                         <td class="b tar">@dr["Просрочка"]</td>
                         <td class="b tar">@Convert.ToDouble(dr["Сумма"]).ToString("n2")</td>
-                        <td class="b"
+                        <td class="b @((String.IsNullOrWhiteSpace(dr["docs_ret_comm"] as String))? "" : "docs-ret")"
                             data-comment="@dr["docs_ret_comm"]"
                             onclick="ReportsViewsR1Report.showCommentDiv(this)">
                             @dr["Второй экз. вернули"]
@@ -195,6 +198,7 @@
     </table>
     <div class="comment" style="position: absolute; background-color: #fff; border: 1px solid black; padding: 4px; display: none;">
         <div style="width: 100%; text-align: right; margin-bottom: 2px; font-weight: bold" onclick="ReportsViewsR1Report.hideCommentDiv()">X</div>
+        <input class="data-sud-iddoc" type="hidden" value="" />
         <table>
             <tr><td colspan="2"><textarea></textarea></td></tr>
             <tr>
@@ -207,10 +211,12 @@
 <script type="text/javascript">
     var ReportsViewsR1Report = (function () {
         var c = $('#reports_views_r1_report div.comment');
+        var i = c.find('input.data-sud-iddoc');
         var t = c.find('textarea');
         return {
             showCommentDiv: function (e) {
                 e = $(e);
+                i.val(e.parent().attr('data-sud-iddoc'));
                 t.text(e.attr('data-comment'));
                 c.hide();
                 var top = e.position().top;
@@ -223,7 +229,22 @@
                 c.hide();
             },
             saveComment: function () {
-                alert(t.text());
+                var rqp = {
+                    SessionId: Nskd.Server.SessionId,
+                    Command: '[Garza].[dbo].[save_docs_ret_comm]',
+                    Parameters: [
+                        { Name: 'iddoc', Value: i.val()},
+                        { Name: 'docs_ret_comm', Value: t.text() }
+                    ]
+                };
+                Nskd.Http.post({
+                    url: '/Reports/R1/SaveDocsRetComm',
+                    rqp: rqp,
+                    done: function (data) {
+                        //alert(data);
+                    }
+                });
+                ReportsViewsR1Report.hideCommentDiv();
             }
         };
     })();
