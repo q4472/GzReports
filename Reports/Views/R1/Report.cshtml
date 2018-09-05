@@ -147,7 +147,7 @@
                         <td class="b @((String.IsNullOrWhiteSpace(dr["docs_ret_comm"] as String))? "" : "docs-ret")"
                             data-comment="@dr["docs_ret_comm"]"
                             onclick="ReportsViewsR1Report.showCommentDiv(this)">
-                            @dr["Второй экз. вернули"]
+                            @dr["Второй экз. вернули"]&nbsp;@dr["docs_ret_comm"]
                         </td>
                     </tr>
                     emplSumm += Convert.ToDouble(dr["Сумма"]);
@@ -213,22 +213,28 @@
         var c = $('#reports_views_r1_report div.comment');
         var i = c.find('input.data-sud-iddoc');
         var t = c.find('textarea');
+        var td = null;
         return {
             showCommentDiv: function (e) {
-                e = $(e);
-                i.val(e.parent().attr('data-sud-iddoc'));
-                t.text(e.attr('data-comment'));
+                td = $(e);
+                i.val(td.parent().attr('data-sud-iddoc'));
+                t.text(td.attr('data-comment'));
                 c.hide();
-                var top = e.position().top;
-                var left = e.position().left;
+                var top = td.position().top;
+                var left = td.position().left;
                 c.offset({ top: 0, left: 0 });
                 c.show().offset({ top: top, left: left });
             },
             hideCommentDiv: function () {
+                i.val('');
                 t.text('');
                 c.hide();
             },
             saveComment: function () {
+                var tdLocal = td;
+                var tdLocalOldText = tdLocal.text();
+                while (tdLocalOldText.length > 0 && (tdLocalOldText[0] == ' ' || tdLocalOldText[0] == '\n')) tdLocalOldText = tdLocalOldText.substr(1);
+                tdLocalOldText = (tdLocalOldText.substr(0, 2) == 'да') ? 'да' : 'нет'
                 var rqp = {
                     SessionId: Nskd.Server.SessionId,
                     Command: '[Garza].[dbo].[save_docs_ret_comm]',
@@ -241,7 +247,15 @@
                     url: '/Reports/R1/SaveDocsRetComm',
                     rqp: rqp,
                     done: function (data) {
-                        //alert(data);
+                        if (data != null && data != '') {
+                            tdLocal.html(tdLocalOldText + ' ' + data);
+                            tdLocal.addClass('docs-ret');
+                            tdLocal.attr('data-comment', data);
+                        } else {
+                            tdLocal.html(tdLocalOldText);
+                            tdLocal.removeClass('docs-ret');
+                            tdLocal.attr('data-comment', '');
+                        }
                     }
                 });
                 ReportsViewsR1Report.hideCommentDiv();

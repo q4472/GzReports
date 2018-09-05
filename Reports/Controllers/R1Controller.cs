@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using MvcApplication2.Models;
 using Nskd;
+using System.Data;
 
 namespace MvcApplication2.Controllers
 {
@@ -40,7 +41,11 @@ namespace MvcApplication2.Controllers
             RequestPackage rqp = RequestPackage.ParseRequest(Request.InputStream, Request.ContentEncoding);
             r += Nskd.JsonV3.ToString(rqp) + "\n";
             ResponsePackage rsp = rqp.GetResponse("http://127.0.0.1:11012/");
-            r += Nskd.JsonV3.ToString(rsp) + "\n";
+            DataTable dt = rsp.GetFirstTable();
+            if (dt != null && dt.Columns.Contains("docs_ret_comm") && dt.Rows.Count > 0)
+            {
+                r = dt.Rows[0]["docs_ret_comm"] as String;
+            }
             return r;
         }
     }
