@@ -37,7 +37,7 @@
             <col width="100" />
             <col width="60" />
             <col width="130" />
-            <col width="60" />
+            <col width="100" />
         </colgroup>
         <tr class="header2">
             <td colspan="9">Отчёт по неоплаченным отгрузкам</td>
@@ -130,7 +130,7 @@
                         data-sud-payments-date="@dr["Срок оплаты установленный вручную"]"
                         data-sud-note="@dr["sud_note"]">
                         @if ((dr["sud_descr"] == DBNull.Value) || ((String)dr["sud_descr"] == ""))
-                    {
+                        {
                             <td class="b"><div class="note_e">@dr["sud_descr"]</div></td>
                         }
                         else
