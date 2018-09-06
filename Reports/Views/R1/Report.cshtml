@@ -218,7 +218,7 @@
             showCommentDiv: function (e) {
                 td = $(e);
                 i.val(td.parent().attr('data-sud-iddoc'));
-                t.text(td.attr('data-comment'));
+                t.val(td.attr('data-comment'));
                 c.hide();
                 var top = td.position().top;
                 var left = td.position().left;
@@ -227,7 +227,7 @@
             },
             hideCommentDiv: function () {
                 i.val('');
-                t.text('');
+                t.val('');
                 c.hide();
             },
             saveComment: function () {
@@ -240,7 +240,7 @@
                     Command: '[Garza].[dbo].[save_docs_ret_comm]',
                     Parameters: [
                         { Name: 'iddoc', Value: i.val()},
-                        { Name: 'docs_ret_comm', Value: t.text() }
+                        { Name: 'docs_ret_comm', Value: t.val() }
                     ]
                 };
                 Nskd.Http.post({
