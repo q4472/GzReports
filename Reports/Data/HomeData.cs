@@ -80,7 +80,8 @@ namespace FarmSib.Base.Data
                 DateTime? onDate = null,
                 Boolean sud = true,
                 Boolean ord = true,
-                Boolean sec = false
+                Boolean IsSecondCopyRecived = false,
+                Boolean IsSecondCopyNotRecived = false
                 )
             {
                 DataTable dt = null;
@@ -97,7 +98,8 @@ namespace FarmSib.Base.Data
                     new RequestParameter("date", onDate),
                     new RequestParameter("sud", sud),
                     new RequestParameter("ord", ord),
-                    new RequestParameter("sec", sec)
+                    new RequestParameter("IsSecondCopyRecived", IsSecondCopyRecived),
+                    new RequestParameter("IsSecondCopyNotRecived", IsSecondCopyNotRecived)
                 };
                 dt = GetFirstTable(Execute(rqp));
                 return dt;

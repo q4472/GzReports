@@ -58,8 +58,9 @@ namespace MvcApplication2.Models
                             String docNo = dr["doc_no"] as String;
                             String docDate = dr["doc_date"] as String;
                             String email = (dr["person_email"] as String) ?? "";
+                            String client = (dr["клиент"] as String) ?? "";
                             String all = (agreement_cascade) ? " и для всех накладных по этому договору" : "";
-                            String msg = String.Format("Для расходной накладной № {0} от {1}{2} установлен судебный статус.", docNo, docDate, all);
+                            String msg = String.Format($"Для расходной накладной № {docNo} от {docDate} '{client}' {all} установлен судебный статус.");
                             if (!String.IsNullOrWhiteSpace(email))
                             {
                                 HomeData.Mail.Send(email + ": " + msg, "grshanin@farmsib.ru");

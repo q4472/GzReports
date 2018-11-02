@@ -23,6 +23,7 @@ namespace MvcApplication2.Models
         public Boolean IsSudChecked { get; set; }
         public Boolean IsOrdChecked { get; set; }
         public Boolean IsSecondCopyRecived { get; set; }
+        public Boolean IsSecondCopyNotRecived { get; set; }
         public DataTable ReportData { get; set; }
         public String Msg { get; set; }
 
@@ -34,6 +35,7 @@ namespace MvcApplication2.Models
             IsSudChecked = true;
             IsOrdChecked = true;
             IsSecondCopyRecived = false;
+            IsSecondCopyNotRecived = false;
         }
         public void GetReport()
         {
@@ -62,7 +64,8 @@ namespace MvcApplication2.Models
                 OnDate,
                 IsSudChecked,
                 IsOrdChecked,
-                IsSecondCopyRecived
+                IsSecondCopyRecived,
+                IsSecondCopyNotRecived
                 );
         }
     }
